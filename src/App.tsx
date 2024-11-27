@@ -13,6 +13,15 @@ function App() {
     );
   };
 
+  const formatMoveOutput = (move: any) => {
+    const vgd = move.version_group_details.filter(
+      (move: any) => move["version_group"]["name"] === "emerald"
+    );
+
+    move.version_group_details = vgd[0];
+    return move;
+  };
+
   const handleSubmit = async () => {
     const formatPokemon = (str: string) => {
       return str.toLowerCase();
@@ -23,9 +32,7 @@ function App() {
 
     const json = await response.json();
 
-    const moves = json["moves"]
-      .filter(isMoveGenIII)
-      .map((move: any) => move.move);
+    const moves = json["moves"].filter(isMoveGenIII).map(formatMoveOutput);
 
     setMoves(moves);
   };
@@ -41,11 +48,22 @@ function App() {
         <input type="text" name="pokemon" id="pokemon_input" />
         <button onClick={handleSubmit}>Go!</button>
 
-        {moves.map((move: any) => (
-          <div>
-            <p>{move.name}</p>
-          </div>
-        ))}
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Method</th>
+            <th>Level</th>
+          </tr>
+          {moves.map((move: any) => {
+            return (
+              <tr>
+                <td>{move.move.name}</td>
+                <td>{move.version_group_details.move_learn_method.name}</td>
+                <td>{move.version_group_details.level_learned_at}</td>
+              </tr>
+            );
+          })}
+        </thead>
       </main>
     </div>
   );
