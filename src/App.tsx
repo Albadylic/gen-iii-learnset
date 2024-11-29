@@ -5,7 +5,6 @@ import pokemonNames from "./pokemon_gen1_to_3_full.json";
 
 function App() {
   const [choices, setChoices] = useState(["pikachu"]);
-  const [pokemon, setPokemon] = useState("pikachu");
   const [moves, setMoves] = useState([]);
 
   const moveInEmerald = (move: any) => {
@@ -42,11 +41,9 @@ function App() {
     return 0;
   };
 
-  const handleSubmit = async () => {
-    const formatPokemon = (str: string) => {
-      return str.toLowerCase();
-    };
-    const url = `https://pokeapi.co/api/v2/pokemon/${formatPokemon(pokemon)}/`;
+  const handleChoice = async (e: any) => {
+    const pokemon = e.target.innerText.toLowerCase();
+    const url = `https://pokeapi.co/api/v2/pokemon/${pokemon}/`;
 
     const response = await fetch(url);
 
@@ -67,10 +64,6 @@ function App() {
         .filter((pokemon) => pokemon.name.toLowerCase().includes(input))
         .map((pokemon: any) => pokemon.name)
     );
-  };
-
-  const handleChoice = (e: any) => {
-    setPokemon(e.target.innerText.toLowerCase());
   };
 
   return (
@@ -99,7 +92,6 @@ function App() {
               </li>
             ))}
           </ul>
-          <button onClick={handleSubmit}>Go!</button>
         </div>
 
         <div id="Results">
