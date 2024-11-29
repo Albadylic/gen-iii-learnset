@@ -9,7 +9,7 @@ function App() {
   const [pokemon, setPokemon] = useState("pikachu");
   const [moves, setMoves] = useState([]);
 
-  const isMoveGenIII = (move: any) => {
+  const moveInEmerald = (move: any) => {
     return (
       move.version_group_details.filter(
         (move: any) => move["version_group"]["name"] === "emerald"
@@ -21,9 +21,26 @@ function App() {
     const vgd = move.version_group_details.filter(
       (move: any) => move["version_group"]["name"] === "emerald"
     );
-
     move.version_group_details = vgd[0];
-    return move;
+
+    const output = {
+      name: move.move.name,
+      url: move.move.url,
+      level: vgd[0].level_learned_at,
+      method: vgd[0].move_learn_method.name,
+    };
+
+    return output;
+  };
+
+  const sortMoves = (a: any, b: any) => {
+    if (a.method < b.method) {
+      return -1;
+    }
+    if (a.method > b.method) {
+      return 1;
+    }
+    return 0;
   };
 
   const handleSubmit = async () => {
@@ -37,7 +54,7 @@ function App() {
     const json = await response.json();
 
     const moves = json["moves"]
-      .filter(isMoveGenIII)
+      .filter(moveInEmerald)
       .map(formatMoveOutput)
       .sort(sortMoves);
 
@@ -58,22 +75,6 @@ function App() {
 
   const handleChoice = (e: any) => {
     setPokemon(e.target.innerText.toLowerCase());
-  };
-
-  const sortMoves = (a: any, b: any) => {
-    if (
-      a.version_group_details.move_learn_method.name <
-      b.version_group_details.move_learn_method.name
-    ) {
-      return -1;
-    }
-    if (
-      a.version_group_details.move_learn_method.name >
-      b.version_group_details.move_learn_method.name
-    ) {
-      return 1;
-    }
-    return 0;
   };
 
   return (
@@ -116,9 +117,9 @@ function App() {
             {moves.map((move: any) => {
               return (
                 <tr>
-                  <td>{move.move.name}</td>
-                  <td>{move.version_group_details.move_learn_method.name}</td>
-                  <td>{move.version_group_details.level_learned_at}</td>
+                  <td>{move.name}</td>
+                  <td>{move.method}</td>
+                  <td>{move.level}</td>
                 </tr>
               );
             })}
