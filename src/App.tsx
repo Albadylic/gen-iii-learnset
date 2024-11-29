@@ -4,7 +4,6 @@ import "./App.css";
 import pokemonNames from "./pokemon_gen1_to_3_full.json";
 
 function App() {
-  const [input, setInput] = useState("pikachu");
   const [choices, setChoices] = useState(["pikachu"]);
   const [pokemon, setPokemon] = useState("pikachu");
   const [moves, setMoves] = useState([]);
@@ -62,13 +61,10 @@ function App() {
   };
 
   const handleChange = (e: any) => {
-    setInput(e.target.value);
-  };
-
-  const handleSearch = (e: any) => {
+    const input = e.target.value;
     setChoices(
       pokemonNames.pokemon
-        .filter((pokemon) => pokemon.name.includes(input))
+        .filter((pokemon) => pokemon.name.toLowerCase().includes(input))
         .map((pokemon: any) => pokemon.name)
     );
   };
@@ -92,7 +88,6 @@ function App() {
             id="pokemon_input"
             onChange={handleChange}
           />
-          <button onClick={handleSearch}>Search</button>
         </div>
 
         <div id="Confirm">
