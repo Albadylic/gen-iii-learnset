@@ -3,25 +3,37 @@ import "./App.css";
 
 import pokemonNames from "./pokemon_gen1_to_3_full.json";
 
-function App() {
-  const [choices, setChoices] = useState(["pikachu"]);
-  const [moves, setMoves] = useState([]);
+import PokeAPI, { IPokemonMove } from "pokeapi-typescript";
 
-  const moveInEmerald = (move: any) => {
+interface CustomMoveType {
+  name: string;
+  url: string;
+  level: number | string;
+  method: string;
+}
+
+interface PokemonJSONType {
+  name: string;
+}
+
+function App() {
+  const [choices, setChoices] = useState<string[]>([]);
+  const [moves, setMoves] = useState<CustomMoveType[]>([]);
+
+  const moveInEmerald = (move: IPokemonMove) => {
     return (
       move.version_group_details.filter(
-        (move: any) => move["version_group"]["name"] === "emerald"
+        (move) => move["version_group"]["name"] === "emerald"
       ).length > 0
     );
   };
 
-  const formatMoveOutput = (move: any) => {
+  const formatMoveOutput = (move: IPokemonMove) => {
     const vgd = move.version_group_details.filter(
-      (move: any) => move["version_group"]["name"] === "emerald"
+      (move) => move["version_group"]["name"] === "emerald"
     );
-    move.version_group_details = vgd[0];
 
-    const output = {
+    const output: CustomMoveType = {
       name: move.move.name,
       url: move.move.url,
       level: vgd[0].level_learned_at,
@@ -31,7 +43,7 @@ function App() {
     return output;
   };
 
-  const sortMoves = (a: any, b: any) => {
+  const sortMoves = (a: CustomMoveType, b: CustomMoveType) => {
     if (a.method < b.method) {
       return -1;
     }
@@ -41,15 +53,13 @@ function App() {
     return 0;
   };
 
-  const handleChoice = async (e: any) => {
-    const pokemon = e.target.innerText.toLowerCase();
-    const url = `https://pokeapi.co/api/v2/pokemon/${pokemon}/`;
+  const handleChoice = async (e: React.MouseEvent<HTMLLIElement>) => {
+    const target = e.target as HTMLLIElement;
+    const pokemon = target.innerText.toLowerCase();
 
-    const response = await fetch(url);
+    const response = await PokeAPI.Pokemon.resolve(pokemon);
 
-    const json = await response.json();
-
-    const moves = json["moves"]
+    const moves = response["moves"]
       .filter(moveInEmerald)
       .map(formatMoveOutput)
       .sort(sortMoves);
@@ -57,12 +67,12 @@ function App() {
     setMoves(moves);
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setChoices(
       pokemonNames.pokemon
         .filter((pokemon) => pokemon.name.toLowerCase().includes(input))
-        .map((pokemon: any) => pokemon.name)
+        .map((pokemon: PokemonJSONType) => pokemon.name)
     );
   };
 
@@ -101,9 +111,9 @@ function App() {
               <th>Method</th>
               <th>Level</th>
             </tr>
-            {moves.map((move: any) => {
+            {moves.map((move: CustomMoveType) => {
               return (
-                <tr>
+                <tr key={move.name}>
                   <td>{move.name}</td>
                   <td>{move.method}</td>
                   <td>{move.level}</td>
