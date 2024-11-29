@@ -36,7 +36,10 @@ function App() {
 
     const json = await response.json();
 
-    const moves = json["moves"].filter(isMoveGenIII).map(formatMoveOutput);
+    const moves = json["moves"]
+      .filter(isMoveGenIII)
+      .map(formatMoveOutput)
+      .sort(sortMoves);
 
     setMoves(moves);
   };
@@ -55,7 +58,22 @@ function App() {
 
   const handleChoice = (e: any) => {
     setPokemon(e.target.innerText.toLowerCase());
-    console.log(pokemon);
+  };
+
+  const sortMoves = (a: any, b: any) => {
+    if (
+      a.version_group_details.move_learn_method.name <
+      b.version_group_details.move_learn_method.name
+    ) {
+      return -1;
+    }
+    if (
+      a.version_group_details.move_learn_method.name >
+      b.version_group_details.move_learn_method.name
+    ) {
+      return 1;
+    }
+    return 0;
   };
 
   return (
