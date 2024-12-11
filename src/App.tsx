@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./App.css";
-import tailwind from "tailwindcss";
 
 import pokemonNames from "./pokemon_gen1_to_3_full.json";
 
@@ -63,10 +62,7 @@ function App() {
     return 0;
   };
 
-  const handleChoice = async (e: React.MouseEvent<HTMLLIElement>) => {
-    const target = e.target as HTMLLIElement;
-    const pokemon = target.innerText.toLowerCase();
-
+  const handleChoice = async (pokemon: string) => {
     const response = await PokeAPI.Pokemon.resolve(pokemon);
 
     const moves = response["moves"]
@@ -113,7 +109,7 @@ function App() {
             {choices.map((choice) => (
               <li
                 key={choice["name"]}
-                onClick={handleChoice}
+                onClick={() => handleChoice(choice["name"])}
                 className="flex flex-col border m-1 rounded bg-slate-300 text-slate-800	 hover:bg-slate-700	hover:text-slate-300 cursor-pointer	"
               >
                 <img src={choice["sprite"]} alt={`${choice["name"]}`} />
