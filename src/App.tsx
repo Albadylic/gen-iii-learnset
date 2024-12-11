@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import tailwind from "tailwindcss";
 
 import pokemonNames from "./pokemon_gen1_to_3_full.json";
 
@@ -15,27 +16,18 @@ interface CustomMoveType {
 interface PokemonJSONType {
   id: number;
   name: string;
-  types: [
-    {
-      slot: number;
-      type: {
-        name: string;
-        url: string;
-      };
-    },
-    {
-      slot: number;
-      type: {
-        name: string;
-        url: string;
-      };
-    }
-  ];
+  types: {
+    slot: number;
+    type: {
+      name: string;
+      url: string;
+    };
+  }[];
   sprite: string;
 }
 
 function App() {
-  const [choices, setChoices] = useState<string[]>([]);
+  const [choices, setChoices] = useState<PokemonJSONType[]>([]);
   const [moves, setMoves] = useState<CustomMoveType[]>([]);
 
   const moveInEmerald = (move: IPokemonMove) => {
@@ -92,12 +84,9 @@ function App() {
       setChoices([]);
     } else {
       setChoices(
-        pokemonNames
-          .filter((pokemon) => pokemon.name.toLowerCase().includes(input))
-          .map(
-            (pokemon) =>
-              `${pokemon.name[0].toUpperCase()}${pokemon.name.substring(1)}`
-          )
+        pokemonNames.filter((pokemon) =>
+          pokemon.name.toLowerCase().includes(input)
+        )
       );
     }
   };
@@ -120,11 +109,18 @@ function App() {
         </div>
 
         <div id="Confirm">
-          <p>Is this who you meant?</p>
-          <ul>
+          <ul className="grid grid-cols-6">
             {choices.map((choice) => (
-              <li key={choice} onClick={handleChoice}>
-                {choice}
+              <li
+                key={choice["name"]}
+                onClick={handleChoice}
+                className="flex flex-col border m-1 rounded bg-slate-300 text-slate-800	 hover:bg-slate-700	hover:text-slate-300 cursor-pointer	"
+              >
+                <img src={choice["sprite"]} alt={`${choice["name"]}`} />
+                <p>
+                  {choice["name"][0].toUpperCase()}
+                  {choice["name"].substring(1)}
+                </p>
               </li>
             ))}
           </ul>
