@@ -13,7 +13,25 @@ interface CustomMoveType {
 }
 
 interface PokemonJSONType {
+  id: number;
   name: string;
+  types: [
+    {
+      slot: number;
+      type: {
+        name: string;
+        url: string;
+      };
+    },
+    {
+      slot: number;
+      type: {
+        name: string;
+        url: string;
+      };
+    }
+  ];
+  sprite: string;
 }
 
 function App() {
@@ -68,12 +86,20 @@ function App() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    setChoices(
-      pokemonNames.pokemon
-        .filter((pokemon) => pokemon.name.toLowerCase().includes(input))
-        .map((pokemon: PokemonJSONType) => pokemon.name)
-    );
+    const input = e.target.value.toLowerCase();
+
+    if (input === "") {
+      setChoices([]);
+    } else {
+      setChoices(
+        pokemonNames
+          .filter((pokemon) => pokemon.name.toLowerCase().includes(input))
+          .map(
+            (pokemon) =>
+              `${pokemon.name[0].toUpperCase()}${pokemon.name.substring(1)}`
+          )
+      );
+    }
   };
 
   return (
