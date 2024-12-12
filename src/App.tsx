@@ -42,6 +42,8 @@ function App() {
       (move) => move["version_group"]["name"] === "emerald"
     );
 
+    // It'd be cool to include the type but this would require a further API call to move.move.url
+
     const output: CustomMoveType = {
       name: move.move.name,
       url: move.move.url,
@@ -52,7 +54,17 @@ function App() {
     return output;
   };
 
-  const sortMoves = (a: CustomMoveType, b: CustomMoveType) => {
+  const sortMoveLevel = (a: CustomMoveType, b: CustomMoveType) => {
+    if (a.level < b.level) {
+      return -1;
+    }
+    if (a.level > b.level) {
+      return 1;
+    }
+    return 0;
+  };
+
+  const sortMoveMethod = (a: CustomMoveType, b: CustomMoveType) => {
     if (a.method < b.method) {
       return -1;
     }
@@ -69,7 +81,8 @@ function App() {
     const moves = response["moves"]
       .filter(moveInEmerald)
       .map(formatMoveOutput)
-      .sort(sortMoves);
+      .sort(sortMoveLevel)
+      .sort(sortMoveMethod);
 
     setMoves(moves);
   };
@@ -86,6 +99,11 @@ function App() {
         )
       );
     }
+  };
+
+  const formatMoveName = (move: string) => {
+    move = move.split("-").join(" ");
+    return `${move[0].toUpperCase()}${move.substring(1)}`;
   };
 
   return (
@@ -136,8 +154,8 @@ function App() {
               {moves.map((move: CustomMoveType) => {
                 return (
                   <tr key={move.name} className="odd:bg-white even:bg-slate-50">
-                    <td className="text-left">{move.name}</td>
-                    <td>{move.method}</td>
+                    <td className="text-left">{formatMoveName(move.name)}</td>
+                    <td>{formatMoveName(move.method)}</td>
                     <td>{move.level}</td>
                   </tr>
                 );
