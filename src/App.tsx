@@ -89,6 +89,7 @@ function App() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value.toLowerCase();
+    setMoves([]);
 
     if (input === "") {
       setChoices([]);
@@ -111,20 +112,23 @@ function App() {
       <header className="bg-slate-800 flex justify-center text-2xl text-white p-2">
         <h1>Gen III Moveset Checker</h1>
       </header>
-      <main>
-        <div id="Search">
-          <h3>Type a Pokemon</h3>
-          <label htmlFor="pokemon_input">Enter the name of a Pokemon</label>
+      <main className="flex flex-col items-center">
+        <div
+          id="Search"
+          className="flex w-2/3 justify-evenly border-4 rounded p-2 m-2"
+        >
+          <label htmlFor="pokemon_input">Type a Pokemon: </label>
           <input
             type="text"
             name="pokemon"
             id="pokemon_input"
             onChange={handleChange}
+            className="border"
           />
         </div>
 
         <div id="Confirm">
-          <ul className="grid grid-cols-6">
+          <ul className="flex justify-center flex-basis-1 flex-wrap text-center">
             {choices.map((choice) => (
               <li
                 key={choice["name"]}
@@ -141,8 +145,8 @@ function App() {
           </ul>
         </div>
 
-        <div id="Results">
-          <table className="table-auto w-screen">
+        <div id="Results" className="w-screen">
+          <table className="table-auto w-full m-2">
             <thead>
               <tr className="m-2 bg-slate-700 text-white">
                 <th className="text-left">Name</th>
