@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/gen-iii-learnset/static/css/main.73975e84.css",
+    "main.js": "/gen-iii-learnset/static/js/main.aeb97988.js",
+    "static/js/453.5699db0f.chunk.js": "/gen-iii-learnset/static/js/453.5699db0f.chunk.js",
+    "index.html": "/gen-iii-learnset/index.html",
+    "main.73975e84.css.map": "/gen-iii-learnset/static/css/main.73975e84.css.map",
+    "main.aeb97988.js.map": "/gen-iii-learnset/static/js/main.aeb97988.js.map",
+    "453.5699db0f.chunk.js.map": "/gen-iii-learnset/static/js/453.5699db0f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.73975e84.css",
+    "static/js/main.aeb97988.js"
+  ]
+}
