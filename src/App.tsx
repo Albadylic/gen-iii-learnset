@@ -62,8 +62,9 @@ function App() {
     return 0;
   };
 
-  const handleChoice = async (pokemon: string) => {
-    const response = await PokeAPI.Pokemon.resolve(pokemon);
+  const handleChoice = async (pokemon: PokemonJSONType) => {
+    setChoices([pokemon]);
+    const response = await PokeAPI.Pokemon.resolve(pokemon["name"]);
 
     const moves = response["moves"]
       .filter(moveInEmerald)
@@ -109,7 +110,7 @@ function App() {
             {choices.map((choice) => (
               <li
                 key={choice["name"]}
-                onClick={() => handleChoice(choice["name"])}
+                onClick={() => handleChoice(choice)}
                 className="flex flex-col border m-1 rounded bg-slate-300 text-slate-800	 hover:bg-slate-700	hover:text-slate-300 cursor-pointer	"
               >
                 <img src={choice["sprite"]} alt={`${choice["name"]}`} />
@@ -123,22 +124,26 @@ function App() {
         </div>
 
         <div id="Results">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Method</th>
-              <th>Level</th>
-            </tr>
-            {moves.map((move: CustomMoveType) => {
-              return (
-                <tr key={move.name}>
-                  <td>{move.name}</td>
-                  <td>{move.method}</td>
-                  <td>{move.level}</td>
-                </tr>
-              );
-            })}
-          </thead>
+          <table className="table-auto w-screen">
+            <thead>
+              <tr className="m-2 bg-slate-700 text-white">
+                <th className="text-left">Name</th>
+                <th>Method</th>
+                <th>Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              {moves.map((move: CustomMoveType) => {
+                return (
+                  <tr key={move.name} className="odd:bg-white even:bg-slate-50">
+                    <td className="text-left">{move.name}</td>
+                    <td>{move.method}</td>
+                    <td>{move.level}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </main>
     </div>
