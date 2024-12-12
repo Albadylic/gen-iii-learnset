@@ -108,7 +108,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <header className="bg-slate-800 flex justify-center text-2xl text-white p-2">
         <h1>Gen III Moveset Checker</h1>
       </header>
       <main>
@@ -154,9 +154,11 @@ function App() {
               {moves.map((move: CustomMoveType) => {
                 return (
                   <tr key={move.name} className="odd:bg-white even:bg-slate-50">
-                    <td className="text-left">{formatMoveName(move.name)}</td>
-                    <td>{formatMoveName(move.method)}</td>
-                    <td>{move.level}</td>
+                    <td>{formatMoveName(move.name)}</td>
+                    <td className="text-center">
+                      {formatMoveName(move.method)}
+                    </td>
+                    <td className="text-center">{move.level}</td>
                   </tr>
                 );
               })}
